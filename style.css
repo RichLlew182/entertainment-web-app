@@ -35,10 +35,15 @@ body {
 
 /* Custom CSS */
 
+#trendingMovies {
+    background-color: lightblue;
+}
+
 .bookmark {
     position: absolute;
     top: 20px;
     right: 20px;
+    padding: 0px;
 }
 
 .movie-card {

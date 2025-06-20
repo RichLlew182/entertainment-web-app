@@ -16,8 +16,6 @@ async function getData() {
     }
 }
 
-const wrapper = document.querySelector('#movies');
-
 class Movie {
 
     constructor(moveieData) {
@@ -35,7 +33,7 @@ class Movie {
         const movieDiv = document.createElement('div');
         movieDiv.classList.add('movie-card')
 
-        const movieTitle = document.createElement('h2');
+        const movieTitle = document.createElement('h3');
         const movieYear = document.createElement('p');
         const movieImages = document.createElement('div');
         const movieRating = document.createElement('p');
@@ -66,6 +64,9 @@ class Movie {
 
 }
 
+const recommendedWrapper = document.querySelector('#recommendedMovies');
+const trendingWrapper = document.querySelector('#trendingMovies');
+
 function handleData(data) {
 
     for (const val of data) {
@@ -73,7 +74,12 @@ function handleData(data) {
         const movie = new Movie(val);
         console.log(movie);
         const movieCard = movie.movieCard();
-        wrapper.appendChild(movieCard)
+
+        if (val.isTrending === true) {
+            trendingWrapper.appendChild(movieCard)
+        } else {
+            recommendedWrapper.appendChild(movieCard);
+        }
     }
 
 }
