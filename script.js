@@ -1,4 +1,7 @@
-async function getData() {
+async function getData(input) {
+
+    console.log({ input })
+
     const url = "./data.json";
     try {
         const response = await fetch(url);
@@ -8,17 +11,10 @@ async function getData() {
 
         const json = await response.json();
 
-        for (const val of json) {
-
-            const movie = new Media(val);
-
-            const movieCard = movie.movieCard();
-
-            if (val.isTrending === true) {
-                trendingWrapper.appendChild(movieCard)
-            } else {
-                recommendedWrapper.appendChild(movieCard);
-            }
+        if (input === undefined) {
+            fetchAllData(json)
+        } else {
+            filterData(json, input)
         }
 
     } catch (error) {
@@ -26,32 +22,35 @@ async function getData() {
     }
 }
 
-async function searchData(input) {
-    const url = "./data.json";
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
+function fetchAllData(json) {
+
+    for (const val of json) {
+
+        const movie = new Media(val);
+
+        const movieCard = movie.movieCard();
+
+        if (val.isTrending === true) {
+            trendingWrapper.appendChild(movieCard)
+        } else {
+            recommendedWrapper.appendChild(movieCard);
         }
+    }
+}
 
-        const json = await response.json();
+function filterData(json, input) {
 
-        const filtered = json.filter((e) => e.title.toLowerCase().includes(input));
+    const filtered = json.filter((e) => e.title.toLowerCase().includes(input));
 
-        const ResultsHeading = document.createElement('h2');
-        ResultsHeading.innerHTML = `Found ${filtered.length} Results for '${input}'`;
-        searchResults.append(ResultsHeading);
+    const ResultsHeading = document.createElement('h2');
+    ResultsHeading.innerHTML = `Found ${filtered.length} Results for '${input}'`;
+    searchResults.append(ResultsHeading);
 
-        for (const val of filtered) {
-            const movie = new Media(val);
-            const movieCard = movie.movieCard();
+    for (const val of filtered) {
+        const movie = new Media(val);
+        const movieCard = movie.movieCard();
 
-            searchResults.append(movieCard);
-        }
-
-
-    } catch (error) {
-        console.error(error.message);
+        searchResults.append(movieCard);
     }
 }
 
@@ -66,13 +65,12 @@ function handleSearch(e) {
         searchResults.innerHTML = '';
         recommendedWrapper.parentElement.parentElement.style.display = 'block';
         trendingWrapper.parentElement.parentElement.style.display = 'block';
-
     }
 
     if (searchVal != '' && searchVal.length >= 3) {
         recommendedWrapper.parentElement.parentElement.style.display = 'none';
         trendingWrapper.parentElement.parentElement.style.display = 'none';
-        searchData(searchVal);
+        getData(searchVal);
     }
 
 }
