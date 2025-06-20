@@ -7,14 +7,76 @@ async function getData() {
         }
 
         const json = await response.json();
-        console.log(json);
+        // console.log(json);
 
-        handleData(json)
+        for (const val of json) {
+            // const { title, thumbnail, year, category, rating, isBookmarked, isTrending } = val;
+            const movie = new Movie(val);
+            // console.log(movie);
+            const movieCard = movie.movieCard();
+
+            if (val.isTrending === true) {
+                trendingWrapper.appendChild(movieCard)
+            } else {
+                recommendedWrapper.appendChild(movieCard);
+            }
+        }
 
     } catch (error) {
         console.error(error.message);
     }
 }
+
+async function searchData(input) {
+    const url = "./data.json";
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+        const json = await response.json();
+
+        const filtered = json.filter((e) => e.title.includes(input));
+
+        for (const val of filtered) {
+            const movie = new Movie(val);
+            const movieCard = movie.movieCard();
+
+            searchResults.appendChild(movieCard);
+        }
+
+
+
+
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+
+const movieInput = document.querySelector('#movieInput')
+
+movieInput.addEventListener('input', function (e) {
+
+    e.preventDefault()
+    const searchVal = e.target.value.trim();
+
+    console.log(searchVal);
+
+    if (searchVal === '') {
+        searchResults.innerHTML = '';
+        getData()
+    }
+
+    if (searchVal != '' && searchVal.length > 2) {
+
+        recommendedWrapper.innerHTML = '';
+        trendingWrapper.innerHTML = ''
+        searchData(searchVal)
+    }
+
+})
 
 class Movie {
 
@@ -38,7 +100,7 @@ class Movie {
         const movieImages = document.createElement('div');
         const movieRating = document.createElement('p');
         const movieCategory = document.createElement('p')
-        console.log(movieImages);
+        // console.log(movieImages);
 
         const bookMarkIcon = document.createElement('img');
         bookMarkIcon.classList.add('bookmark');
@@ -66,22 +128,6 @@ class Movie {
 
 const recommendedWrapper = document.querySelector('#recommendedMovies');
 const trendingWrapper = document.querySelector('#trendingMovies');
-
-function handleData(data) {
-
-    for (const val of data) {
-        // const { title, thumbnail, year, category, rating, isBookmarked, isTrending } = val;
-        const movie = new Movie(val);
-        console.log(movie);
-        const movieCard = movie.movieCard();
-
-        if (val.isTrending === true) {
-            trendingWrapper.appendChild(movieCard)
-        } else {
-            recommendedWrapper.appendChild(movieCard);
-        }
-    }
-
-}
+const searchResults = document.querySelector('#searchResults')
 
 getData()
