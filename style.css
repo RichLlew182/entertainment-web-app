@@ -44,12 +44,11 @@ body {
     top: 20px;
     right: 20px;
     padding: 0px;
+    line-height: 1;
 }
 
 .movie-card {
-    width: 33.3333%;
     position: relative;
-    padding: 0 10px;
 }
 
 .thumbnail {

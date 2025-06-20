@@ -7,12 +7,11 @@ async function getData() {
         }
 
         const json = await response.json();
-        // console.log(json);
 
         for (const val of json) {
-            // const { title, thumbnail, year, category, rating, isBookmarked, isTrending } = val;
-            const movie = new Movie(val);
-            // console.log(movie);
+
+            const movie = new Media(val);
+
             const movieCard = movie.movieCard();
 
             if (val.isTrending === true) {
@@ -37,16 +36,18 @@ async function searchData(input) {
 
         const json = await response.json();
 
-        const filtered = json.filter((e) => e.title.includes(input));
+        const filtered = json.filter((e) => e.title.toLowerCase().includes(input));
+
+        const ResultsHeading = document.createElement('h2');
+        ResultsHeading.innerHTML = `Found ${filtered.length} Results for '${input}'`;
+        searchResults.append(ResultsHeading);
 
         for (const val of filtered) {
-            const movie = new Movie(val);
+            const movie = new Media(val);
             const movieCard = movie.movieCard();
 
-            searchResults.appendChild(movieCard);
+            searchResults.append(movieCard);
         }
-
-
 
 
     } catch (error) {
@@ -59,26 +60,33 @@ const movieInput = document.querySelector('#movieInput')
 
 movieInput.addEventListener('input', function (e) {
 
+
+    searchResults.innerHTML = '';
     e.preventDefault()
-    const searchVal = e.target.value.trim();
+    const searchVal = e.target.value.toLowerCase().trim();
 
     console.log(searchVal);
 
-    if (searchVal === '') {
+    if (searchVal === '' || searchVal.length < 1) {
+
         searchResults.innerHTML = '';
-        getData()
+        getData();
     }
 
-    if (searchVal != '' && searchVal.length > 2) {
+    if (searchVal != '' && searchVal.length >= 3) {
 
-        recommendedWrapper.innerHTML = '';
-        trendingWrapper.innerHTML = ''
-        searchData(searchVal)
+        setTimeout(() => {
+            recommendedWrapper.innerHTML = '';
+            trendingWrapper.innerHTML = ''
+            searchData(searchVal);
+        }, 1000);
+
+
     }
 
 })
 
-class Movie {
+class Media {
 
     constructor(moveieData) {
         this.title = moveieData.title;
@@ -92,18 +100,26 @@ class Movie {
 
     movieCard() {
 
+        const columns = document.createElement('div');
+        columns.setAttribute('class', 'col-12 col-sm-6 col-md-4');
+
         const movieDiv = document.createElement('div');
-        movieDiv.classList.add('movie-card')
+        movieDiv.setAttribute('class', 'movie-card');
+
+        columns.appendChild(movieDiv)
 
         const movieTitle = document.createElement('h3');
         const movieYear = document.createElement('p');
         const movieImages = document.createElement('div');
         const movieRating = document.createElement('p');
-        const movieCategory = document.createElement('p')
-        // console.log(movieImages);
+        const movieCategory = document.createElement('p');
+        const bookmarkButton = document.createElement('button')
 
         const bookMarkIcon = document.createElement('img');
-        bookMarkIcon.classList.add('bookmark');
+
+        bookmarkButton.setAttribute('class', 'btn bookmark border-0')
+
+        bookmarkButton.appendChild(bookMarkIcon)
 
         if (this.isBookmarked === true) {
             bookMarkIcon.src = './assets/icon-bookmark-full.svg'
@@ -112,22 +128,30 @@ class Movie {
         }
 
         movieTitle.innerText = this.title;
+        movieTitle.classList.add('movie-title');
+
         movieYear.innerText = this.year;
+        movieYear.classList.add('movie-year');
+
         movieRating.innerText = this.rating;
+        movieRating.classList.add('movie-rating');
+
         movieCategory.innerText = this.category;
-        movieImages.classList.add('thumbnail')
+        movieCategory.classList.add('movie-category');
+
+        movieImages.classList.add('thumbnail');
         movieImages.style.backgroundImage = `url(${this.thumbnail.regular.large})`
 
-        movieDiv.append(movieImages, bookMarkIcon, movieTitle, movieYear, movieCategory, movieRating);
+        movieDiv.append(movieImages, bookmarkButton, movieTitle, movieYear, movieCategory, movieRating);
 
-        return movieDiv
+        return columns
 
     }
 
 }
 
-const recommendedWrapper = document.querySelector('#recommendedMovies');
-const trendingWrapper = document.querySelector('#trendingMovies');
-const searchResults = document.querySelector('#searchResults')
+const recommendedWrapper = document.querySelector('#recommendedMovies .container .row');
+const trendingWrapper = document.querySelector('#trendingMovies .container .row');
+const searchResults = document.querySelector('#searchResults .container .row')
 
 getData()

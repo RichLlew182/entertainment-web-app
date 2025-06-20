@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
   <link rel="stylesheet" href="./style.css">
 
   <title>Frontend Mentor | Entertainment web app</title>
@@ -15,18 +17,28 @@
 
   <main>
 
-    <input id="movieInput" placeholder="Search for movies or TV series"></input>
+    <section id="searchResults">
+      <div class="container">
+        <input class="form-control" id="movieInput" placeholder="Search for movies or TV series"></input>
 
-    <section id="searchResults"></section>
+        <div class="row"></div>
+      </div>
+    </section>
 
     <section id="trendingMovies">
-      <h2>Trending</h2>
+      <div class="container">
+        <h2>Trending</h2>
+        <div class="row"></div>
+      </div>
 
     </section>
     <!-- Display trending shows -->
 
     <section id="recommendedMovies">
-      <h2>Recommended for you</h2>
+      <div class="container">
+        <h2>Recommended for you</h2>
+        <div class="row"></div>
+      </div>
     </section>
 
     <!-- Display recommended shows -->
