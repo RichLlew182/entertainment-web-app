@@ -104,7 +104,7 @@ class Media {
         const movieCategory = document.createElement('p');
 
         const movieImageWrapper = document.createElement('picture');
-        const movieImage = document.createElement('img');
+        movieImageWrapper.classList.add('thumbnail');
 
         movieImageWrapper.innerHTML = `<source media="(max-width: 767px)" srcset="${this.thumbnail.regular.small}" />
                                         <source media="(min-width: 768px)" srcset="${this.thumbnail.regular.large}" />
@@ -113,7 +113,16 @@ class Media {
         const bookmarkButton = document.createElement('button')
         const bookMarkIcon = document.createElement('img');
         bookmarkButton.setAttribute('class', 'btn bookmark border-0')
-        bookmarkButton.appendChild(bookMarkIcon)
+        bookmarkButton.appendChild(bookMarkIcon);
+
+        movieTitle.innerText = this.title;
+        movieTitle.classList.add('movie-title');
+
+        movieYear.innerText = this.year;
+        movieYear.classList.add('movie-year');
+
+        movieRating.innerText = this.rating;
+        movieRating.classList.add('movie-rating');
 
         if (this.isBookmarked) {
             bookMarkIcon.src = './assets/icon-bookmark-full.svg'
@@ -128,19 +137,13 @@ class Media {
             column.setAttribute('class', 'col-12 col-sm-6 col-md-3');
         }
 
-        movieTitle.innerText = this.title;
-        movieTitle.classList.add('movie-title');
+        if (this.category === 'Movie') {
+            movieCategory.innerHTML = `<img src='./assets/icon-nav-movies.svg'> <span>${this.category}</span>`;
+        } else {
+            movieCategory.innerHTML = `<img src='./assets/icon-nav-tv-series.svg'> <span>${this.category}</span>`;
+        }
 
-        movieYear.innerText = this.year;
-        movieYear.classList.add('movie-year');
-
-        movieRating.innerText = this.rating;
-        movieRating.classList.add('movie-rating');
-
-        movieCategory.innerHTML = `<img src='./assets/icon-nav-movies.svg'> <span>${this.category}</span>`;
         movieCategory.classList.add('movie-category');
-
-        movieImageWrapper.classList.add('thumbnail');
 
         movieDiv.append(movieImageWrapper, bookmarkButton, movieTitle, movieYear, movieCategory, movieRating);
 
