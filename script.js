@@ -55,36 +55,27 @@ async function searchData(input) {
     }
 }
 
-
-const movieInput = document.querySelector('#movieInput')
-
-movieInput.addEventListener('input', function (e) {
-
+function handleSearch(e) {
 
     searchResults.innerHTML = '';
-    e.preventDefault()
     const searchVal = e.target.value.toLowerCase().trim();
 
     console.log(searchVal);
 
-    if (searchVal === '' || searchVal.length < 1) {
-
+    if (searchVal === '' || searchVal.length < 3) {
         searchResults.innerHTML = '';
-        getData();
+        recommendedWrapper.parentElement.parentElement.style.display = 'block';
+        trendingWrapper.parentElement.parentElement.style.display = 'block';
+
     }
 
     if (searchVal != '' && searchVal.length >= 3) {
-
-        setTimeout(() => {
-            recommendedWrapper.innerHTML = '';
-            trendingWrapper.innerHTML = ''
-            searchData(searchVal);
-        }, 1000);
-
-
+        recommendedWrapper.parentElement.parentElement.style.display = 'none';
+        trendingWrapper.parentElement.parentElement.style.display = 'none';
+        searchData(searchVal);
     }
 
-})
+}
 
 class Media {
 
@@ -100,31 +91,41 @@ class Media {
 
     movieCard() {
 
-        const columns = document.createElement('div');
-        columns.setAttribute('class', 'col-12 col-sm-6 col-md-4');
+        const column = document.createElement('div');
 
         const movieDiv = document.createElement('div');
         movieDiv.setAttribute('class', 'movie-card');
 
-        columns.appendChild(movieDiv)
+        column.appendChild(movieDiv)
 
         const movieTitle = document.createElement('h3');
         const movieYear = document.createElement('p');
-        const movieImages = document.createElement('div');
         const movieRating = document.createElement('p');
         const movieCategory = document.createElement('p');
+
+        const movieImageWrapper = document.createElement('picture');
+        const movieImage = document.createElement('img');
+
+        movieImageWrapper.innerHTML = `<source media="(max-width: 767px)" srcset="${this.thumbnail.regular.small}" />
+                                        <source media="(min-width: 768px)" srcset="${this.thumbnail.regular.large}" />
+                                        <img src="${this.thumbnail.regular.large}" alt="${this.title}" />`
+
         const bookmarkButton = document.createElement('button')
-
         const bookMarkIcon = document.createElement('img');
-
         bookmarkButton.setAttribute('class', 'btn bookmark border-0')
-
         bookmarkButton.appendChild(bookMarkIcon)
 
-        if (this.isBookmarked === true) {
+        if (this.isBookmarked) {
             bookMarkIcon.src = './assets/icon-bookmark-full.svg'
         } else {
             bookMarkIcon.src = './assets/icon-bookmark-empty.svg'
+        }
+
+        if (this.isTrending) {
+            movieDiv.classList.add('trending');
+            column.setAttribute('class', 'col-12 col-sm-6 col-md-4');
+        } else {
+            column.setAttribute('class', 'col-12 col-sm-6 col-md-3');
         }
 
         movieTitle.innerText = this.title;
@@ -136,15 +137,14 @@ class Media {
         movieRating.innerText = this.rating;
         movieRating.classList.add('movie-rating');
 
-        movieCategory.innerText = this.category;
+        movieCategory.innerHTML = `<img src='./assets/icon-nav-movies.svg'> <span>${this.category}</span>`;
         movieCategory.classList.add('movie-category');
 
-        movieImages.classList.add('thumbnail');
-        movieImages.style.backgroundImage = `url(${this.thumbnail.regular.large})`
+        movieImageWrapper.classList.add('thumbnail');
 
-        movieDiv.append(movieImages, bookmarkButton, movieTitle, movieYear, movieCategory, movieRating);
+        movieDiv.append(movieImageWrapper, bookmarkButton, movieTitle, movieYear, movieCategory, movieRating);
 
-        return columns
+        return column
 
     }
 
@@ -152,6 +152,9 @@ class Media {
 
 const recommendedWrapper = document.querySelector('#recommendedMovies .container .row');
 const trendingWrapper = document.querySelector('#trendingMovies .container .row');
-const searchResults = document.querySelector('#searchResults .container .row')
+const searchResults = document.querySelector('#searchResults .container .row');
+
+const movieInput = document.querySelector('#movieInput')
+movieInput.addEventListener('input', handleSearch)
 
 getData()
