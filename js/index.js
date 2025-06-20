@@ -1,4 +1,4 @@
-import { Media } from './classes/media.js'
+import { Media } from './classes/media.js';
 
 async function getData(input) {
 
@@ -12,6 +12,8 @@ async function getData(input) {
         }
 
         const json = await response.json();
+
+        localStorage.setItem('movie-data', JSON.stringify(json))
 
         if (input === undefined) {
             fetchAllData(json)

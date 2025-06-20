@@ -6,23 +6,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <link rel="stylesheet" href="./style.css">
 
-  <title>Frontend Mentor | Entertainment web app</title>
+  <title>Bookmarks | Frontend Mentor | Entertainment web app</title>
 </head>
 
 <body>
 
-  Search for bookmarked shows
-
-  Bookmarked Movies
+  <section id="searchResults">
+    <div class="container">
+      <input class="form-control" id="bookmarkInput" placeholder=" Search for bookmarked shows"></input>
+      <div class="row"></div>
+    </div>
+  </section>
 
   <!-- Display bookmarked movies -->
 
-  Bookmarked TV Series
+  <section id="bookmarkedMovies">
+    <div class="container">
+      <h2>Bookmarked Movies</h2>
+      <div class="row"></div>
+    </div>
+  </section>
 
   <!-- Display bookmarked TV series -->
 
-  <script src="bookmarks.js"></script>
+  <section id="bookmarkedSeries">
+    <div class="container">
+      <h2> Bookmarked TV Series</h2>
+      <div class="row"></div>
+    </div>
+  </section>
+
+  <script type="module" src="./js/bookmarks.js"></script>
 
 </body>
 
